@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //import { webSocket } from 'rxjs/websocket'
 import { SocketService } from './socket.service';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Apollo, gql } from 'apollo-angular';
 import { query } from '@angular/animations';
 import { vehical } from './models/vehical';
@@ -10,7 +10,7 @@ import { webSocket } from 'rxjs/webSocket';
 import { of } from 'rxjs';
 import { bufferCount, buffer } from 'rxjs/operators'
 import { concatMap, delay } from 'rxjs/operators';
-
+import {saveAs} from 'file-saver';
 let offsetCount = 10;
 
 const subject = webSocket({
@@ -195,6 +195,21 @@ export class AppComponent implements OnInit {
   }
 
   searchIdFromGraphql(model: string) {
+    // mutation{
+    //   getTable(first:"3",offsetCount:"2"){ 
+    //                 id
+    //                 vid
+    //                 firstName
+    //                 lastName
+    //                 email
+    //                 carMake
+    //                 carModel
+    //                 vinNumber
+    //                 manufacturedDate
+    //                 ageOfVehicle
+    //   }
+    // }
+
     this.apollo.watchQuery<any>(
       {
         query: gql`{
@@ -222,7 +237,24 @@ export class AppComponent implements OnInit {
         this.allVehicals = [data.vehicalById];
       });
   }
+
   getdataFromGraphql() {
+
+    // mutation{
+    //   getTable(first:"3",offsetCount:"2"){ 
+    //                 id
+    //                 vid
+    //                 firstName
+    //                 lastName
+    //                 email
+    //                 carMake
+    //                 carModel
+    //                 vinNumber
+    //                 manufacturedDate
+    //                 ageOfVehicle
+    //   }
+    // }
+
     this.apollo.watchQuery<any>(
       {
         query: gql`{
@@ -260,24 +292,27 @@ export class AppComponent implements OnInit {
     let formData = new FormData();
     formData.append("file", this.file!, this.file!.name!);
 
-    this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
-      console.log(response);
-    });
+    // this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
+    //   console.log(response);
+    // });
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    this.http.post(`"http://localhost:4000/csv/upload"`,formData,
+     {headers,responseType: 'text',
+    
+    })
+    .subscribe((resp: any) => {
+      console.log(resp);
+      // let blob:any = new Blob([resp], { type: 'text/json; charset=utf-8' });
+			// const url = window.URL.createObjectURL(blob);
+			// window.open(url);
+			// //window.location.href = response.url;
+      var blob = new Blob([resp], {
+        type: "text/plain;charset=utf-8"
+      });
+			saveAs(blob, 'test.json');
+    },error=>console.log(error));
+
   }
-
-
-
-  // sendButtonClick() {
-  //   try {
-  //     console.log('connected ccccc');
-  //     this.chatService.sendMessage(this.msgInput);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  // }
-
-  // subject = webSocket('ws://localhost:3000/')
-
 
 }
