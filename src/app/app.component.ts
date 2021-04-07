@@ -5,9 +5,24 @@ import { HttpClient } from "@angular/common/http";
 import { Apollo, gql } from 'apollo-angular';
 import { query } from '@angular/animations';
 import { vehical } from './models/vehical';
+import { io } from 'socket.io-client';
+import { webSocket } from 'rxjs/webSocket';
+import { of } from 'rxjs';
+import { bufferCount, buffer } from 'rxjs/operators'
+import { concatMap, delay } from 'rxjs/operators';
 
 let offsetCount = 10;
 
+const subject = webSocket({
+  url: "ws://localhost:8080",
+  deserializer: (events) => {
+    // if (events.data && events.data.activities) {
+    //   console.log('your dad is here');
+    // }
+    console.log('HEREO')
+    return events
+  }
+});
 
 @Component({
   selector: 'app-root',
@@ -25,11 +40,54 @@ export class AppComponent implements OnInit {
   //vehicals array
   allVehicals: vehical[] = [];
 
+  // socket=io("http://localhost:3000");
+
+
   constructor(private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
-    console.log('started');
     this.getdataFromGraphql();
+
+    subject.pipe(
+      concatMap(x => of(x)
+        .pipe(
+          delay(10000))
+      )
+    ).subscribe(
+      (msg) => { console.log(msg); alert(msg.data); },
+      (err) => console.log(err),
+      () => console.log('complete')
+    );
+
+  }
+  exportCsv() {
+    console.log('message sended');
+    this.apollo.watchQuery<any>(
+      {
+        query: gql`query{
+  
+          messages{
+            id
+            description
+          }
+        }   
+      `
+
+      }
+    ).valueChanges
+      .subscribe(({ data, loading }) => {
+        console.log(data);
+        // this.allVehicals = data.allVehicals.nodes;
+      });
+
+  }
+
+  downloadCsv(higher: string, lower: string) {
+
+    this.http.get(`http://localhost:3000/download/?higher=${higher}&lower=${lower}`).subscribe((response) => {
+      console.log(response);
+    });
+    console.log(lower, higher);
   }
 
   changeOffset(previouseOrNext: string) {
@@ -46,8 +104,8 @@ export class AppComponent implements OnInit {
     }
   }
 
-  updateRow(id:string,fname:string,lname:string,vid:string,email:string){
-    console.log(id,fname,lname,vid,email);
+  updateRow(id: string, fname: string, lname: string, vid: string, email: string) {
+    console.log(id, fname, lname, vid, email);
     this.apollo.mutate<any>(
       {
         mutation: gql`mutation {
@@ -100,8 +158,9 @@ export class AppComponent implements OnInit {
 
   }
   searchModelFromGraphql(model: string) {
-    model=model.trim();
-    console.log(model);
+    model = model.trim();
+    model = model.replace('*', '%');
+
     this.apollo.watchQuery<any>(
       {
         query: gql`query($model:String){
@@ -167,7 +226,7 @@ export class AppComponent implements OnInit {
     this.apollo.watchQuery<any>(
       {
         query: gql`{
-        allVehicals( first:100 offset:${offsetCount} orderBy:AGE_OF_VEHICLE_ASC) {
+        allVehicals( first:100 offset:${offsetCount}  orderBy :MANUFACTURED_DATE_ASC) {
           nodes {
             id
             vid
@@ -201,7 +260,7 @@ export class AppComponent implements OnInit {
     let formData = new FormData();
     formData.append("file", this.file!, this.file!.name!);
 
-    this.http.post("http://localhost:4000/photos/upload", formData).subscribe((response) => {
+    this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
       console.log(response);
     });
   }
@@ -219,20 +278,6 @@ export class AppComponent implements OnInit {
   // }
 
   // subject = webSocket('ws://localhost:3000/')
-  exportCsv() {
-    // this.sendButtonClick();
-    // console.log('sdfsfsdfdsfdsf');
-    // try {
-    //   console.log('dsfdsf');
-    //   console.log(this.subject);
-    //   this.subject.subscribe();
-    //   this.subject.next('ishaaaan');
-    //   this.subject.complete();
 
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // alert('fuck');
-  }
 
 }

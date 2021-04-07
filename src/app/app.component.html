@@ -1,24 +1,88 @@
-<!-- <button type="button" class="btn btn-primary" (click)="exportCsv()">
-  Click to get websocket message
-</button> -->
 
-<h1>upload csv</h1>
-<input
-  type="file"
-  class="file-input"
-  (change)="onFileChange($event)"
-  #fileUpload
-/>
 
-<div>
-  <button type="button" class="btn btn-primary" (click)="submitForm()">
-    upload the csv
-  </button>
+<div class="container">
+
+  
+  <table class="table table-bordered">
+    <thead>
+      
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="card" style="width: 18rem">
+            <div class="card-header">
+              <h1>upload csv</h1>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <input
+                  type="file"
+                  class="file-input"
+                  (change)="onFileChange($event)"
+                  #fileUpload
+                />
+              </li>
+              <li class="list-group-item">
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="submitForm()"
+                  >
+                    upload csv
+                  </button>
+                </div>
+              </li>
+              <li class="list-group-item"></li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div class="card" style="width: 18rem">
+            <div class="card-header"><h2> Download csv based on age</h2></div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <input
+                  #lessThanOrEqualTo
+                  type="text"
+                  class="form-control"
+                  id="model"
+                  placeholder="lessThanOrEqualTo"
+                />
+                <hr />
+                lessThanOrEqualTo
+              </li>
+              <li class="list-group-item">
+                <input
+                  #greaterThanOrEqualTo
+                  type="text"
+                  class="form-control"
+                  id="model"
+                  placeholder="greaterThanOrEqualTo"
+                />
+                <hr />
+                greaterThanOrEqualTo
+              </li>
+
+              <li class="list-group-item">
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2"
+                  (click)="downloadCsv(lessThanOrEqualTo.value,greaterThanOrEqualTo.value)"
+                >
+                  Download csv based on given Criteria
+                </button>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <hr />
-
-<br /><br />
 
 <form class="form-inline">
   <div class="form-group mx-sm-3 mb-2">
@@ -103,7 +167,6 @@
           placeholder="vid"
         />
       </div>
-      
     </div>
   </div>
 </form>
@@ -113,7 +176,15 @@
       <button
         type="button"
         class="btn btn-secondary btn-lg btn-block"
-        (click)="updateRow(idtext.value,fname.value,lname.value,vid.value,email.value)"
+        (click)="
+          updateRow(
+            idtext.value,
+            fname.value,
+            lname.value,
+            vid.value,
+            email.value
+          )
+        "
       >
         Update row with current id
       </button>
@@ -157,35 +228,35 @@
 </div>
 <br />
 <hr />
-<table class="table table-dark">
+<table class="table table-dark table-hover">
   <thead>
     <tr>
       <th scope="col">index</th>
       <th scope="col">id</th>
-      <th scope="col">vid</th>
+      <th scope="col">manufacturedDate</th>
+      <th scope="col">age</th>
       <th scope="col">firstName</th>
       <th scope="col">lastName</th>
       <th scope="col">email</th>
       <th scope="col">carMake</th>
       <th scope="col">carModel</th>
       <th scope="col">vinNumber</th>
-      <th scope="col">manufacturedDate</th>
-      <th scope="col">age</th>
+      <th scope="col">vid</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let vehical of allVehicals; let index = index">
-      <td>{{ index+1 }}</td>
+      <td>{{ index + 1 }}</td>
       <td>{{ vehical.id }}</td>
-      <td>{{ vehical.vid }}</td>
+      <td>{{ vehical.manufacturedDate }}</td>
+      <td>{{ vehical.ageOfVehicle }}</td>
       <td>{{ vehical.firstName }}</td>
       <td>{{ vehical.lastName }}</td>
       <td>{{ vehical.email }}</td>
       <td>{{ vehical.carMake }}</td>
       <td>{{ vehical.carModel }}</td>
       <td>{{ vehical.vinNumber }}</td>
-      <td>{{ vehical.manufacturedDate }}</td>
-      <td>{{ vehical.ageOfVehicle }}</td>
+      <td>{{ vehical.vid }}</td>
     </tr>
   </tbody>
 </table>
