@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 import { bufferCount, buffer } from 'rxjs/operators'
 import { concatMap, delay } from 'rxjs/operators';
 import {saveAs} from 'file-saver';
-let offsetCount = 10;
+let offsetCount = 100;
 
 const subject = webSocket({
   url: "ws://localhost:8080",
@@ -92,13 +92,13 @@ export class AppComponent implements OnInit {
 
   changeOffset(previouseOrNext: string) {
     if (previouseOrNext === 'previouse') {
-      if (offsetCount != 10) {
-        offsetCount = offsetCount - 10;
+      if (offsetCount != 100) {
+        offsetCount = offsetCount - 100;
         console.log(offsetCount);
         this.getdataFromGraphql();
       }
     } else {
-      offsetCount = offsetCount + 10;
+      offsetCount = offsetCount + 100;
       console.log(offsetCount);
       this.getdataFromGraphql();
     }
@@ -157,6 +157,7 @@ export class AppComponent implements OnInit {
       });
 
   }
+  
   searchModelFromGraphql(model: string) {
     model = model.trim();
     model = model.replace('*', '%');
