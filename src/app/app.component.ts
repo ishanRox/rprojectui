@@ -10,7 +10,7 @@ import { webSocket } from 'rxjs/webSocket';
 import { of } from 'rxjs';
 import { bufferCount, buffer } from 'rxjs/operators'
 import { concatMap, delay } from 'rxjs/operators';
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 let offsetCount = 100;
 
 const subject = webSocket({
@@ -60,6 +60,8 @@ export class AppComponent implements OnInit {
     );
 
   }
+
+
   exportCsv() {
     console.log('message sended');
     this.apollo.watchQuery<any>(
@@ -109,20 +111,13 @@ export class AppComponent implements OnInit {
     this.apollo.mutate<any>(
       {
         mutation: gql`mutation {
-          updateVehicalById(
-            input: {id: "${id}", vehicalPatch: {firstName: "${fname}", lastName: "${lname}", email: "${email}", vid: "${vid}"}}
-          ) {
-            vehical {
-              id
-              firstName
-              lastName
-              email
-              carMake
-            }
+          updateRow(id: "${id}", fname: "${fname}", lname: "${lname}", vid: "${vid}", email: "${email}") {
+            ageOfVehicle
+            firstName
           }
         }
-      `
-        ,
+        
+      ` ,
         variables: { id }
       }
     )
@@ -138,12 +133,20 @@ export class AppComponent implements OnInit {
     model = model.trim();
     this.apollo.mutate<any>(
       {
-        mutation: gql` mutation {
-          deleteVehicalById(input: { id: "${model.trim()}" }) {
-            vehical{
-              vinNumber
-            }
+        mutation: gql`mutation{
+          deleteVehicalById(id:"${model}"  ){
+            id
+                        vid
+                        firstName
+                        lastName
+                        email
+                        carMake
+                        carModel
+                        vinNumber
+                        manufacturedDate
+                        ageOfVehicle
           }
+          
         }
       `
         ,
@@ -157,92 +160,65 @@ export class AppComponent implements OnInit {
       });
 
   }
-  
+
+
   searchModelFromGraphql(model: string) {
     model = model.trim();
     model = model.replace('*', '%');
 
-    this.apollo.watchQuery<any>(
+    this.apollo.mutate<any>(
       {
-        query: gql`query($model:String){
-          allVehicals(
-           filter: {
-            carModel: { like:$model }
+        mutation: gql`mutation{
+          searchModelFromGraphql(model:"${model}"  ){
+                         id
+                        vid
+                        firstName
+                        lastName
+                        email
+                        carMake
+                        carModel
+                        vinNumber
+                        manufacturedDate
+                        ageOfVehicle
           }
-        ) {
-            nodes {
-              id
-              vid
-              firstName
-              lastName
-              email
-              carMake
-              carModel
-              vinNumber
-              manufacturedDate
-              ageOfVehicle
-            }
-          }
-        }        
-      `
-        ,
-        variables: { model }
-      }
-    ).valueChanges
-      .subscribe(({ data, loading }) => {
-        console.log(data.allVehicals.nodes);
-        this.allVehicals = data.allVehicals.nodes;
+          
+        }
+      ` }
+    )
+      .subscribe(({ data }) => {
+        console.log(data);
+        this.allVehicals = data.searchModelFromGraphql;
       });
   }
 
-  searchIdFromGraphql(model: string) {
-    // mutation{
-    //   getTable(first:"3",offsetCount:"2"){ 
-    //                 id
-    //                 vid
-    //                 firstName
-    //                 lastName
-    //                 email
-    //                 carMake
-    //                 carModel
-    //                 vinNumber
-    //                 manufacturedDate
-    //                 ageOfVehicle
-    //   }
-    // }
 
-    this.apollo.watchQuery<any>(
+  searchIdFromGraphql(model: string) {
+    this.apollo.mutate<any>(
       {
-        query: gql`{
-          vehicalById(id: "${model}") {
-            id
-            vid
-            firstName
-            lastName
-            email
-            carMake
-            carModel
-            vinNumber
-            manufacturedDate
-            ageOfVehicle
+        mutation: gql`mutation{
+          getTableById(id:"${model}"){ 
+                        id
+                        vid
+                        firstName
+                        lastName
+                        email
+                        carMake
+                        carModel
+                        vinNumber
+                        manufacturedDate
+                        ageOfVehicle
+                        
           }
         }
-          
-      `
-        ,
-        variables: { model }
-      }
-    ).valueChanges
-      .subscribe(({ data, loading }) => {
+      ` }
+    )
+      .subscribe(({ data }) => {
         console.log(data);
-        this.allVehicals = [data.vehicalById];
+        this.allVehicals = [data.getTableById];
       });
   }
 
   getdataFromGraphql() {
-
-   
-
     this.apollo.mutate<any>(
       {
         mutation: gql` mutation{
@@ -267,6 +243,7 @@ export class AppComponent implements OnInit {
       });
   }
 
+
   onFileChange(fileChangeEvent: Event) {
     const target = fileChangeEvent.target as HTMLInputElement;
     const files = target.files as FileList;
@@ -277,27 +254,27 @@ export class AppComponent implements OnInit {
   async submitForm() {
     let formData = new FormData();
     formData.append("file", this.file!, this.file!.name!);
-
     // this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
     //   console.log(response);
     // });
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    this.http.post(`"http://localhost:4000/csv/upload"`,formData,
-     {headers,responseType: 'text',
-    
-    })
-    .subscribe((resp: any) => {
-      console.log(resp);
-      // let blob:any = new Blob([resp], { type: 'text/json; charset=utf-8' });
-			// const url = window.URL.createObjectURL(blob);
-			// window.open(url);
-			// //window.location.href = response.url;
-      var blob = new Blob([resp], {
-        type: "text/plain;charset=utf-8"
-      });
-			saveAs(blob, 'test.json');
-    },error=>console.log(error));
+    this.http.post(`"http://localhost:4000/csv/upload"`, formData,
+      {
+        headers, responseType: 'text',
+
+      })
+      .subscribe((resp: any) => {
+        console.log(resp);
+        // let blob:any = new Blob([resp], { type: 'text/json; charset=utf-8' });
+        // const url = window.URL.createObjectURL(blob);
+        // window.open(url);
+        // //window.location.href = response.url;
+        var blob = new Blob([resp], {
+          type: "text/plain;charset=utf-8"
+        });
+        saveAs(blob, 'test.json');
+      }, error => console.log(error));
 
   }
 
