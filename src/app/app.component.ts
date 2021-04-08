@@ -241,44 +241,29 @@ export class AppComponent implements OnInit {
 
   getdataFromGraphql() {
 
-    // mutation{
-    //   getTable(first:"3",offsetCount:"2"){ 
-    //                 id
-    //                 vid
-    //                 firstName
-    //                 lastName
-    //                 email
-    //                 carMake
-    //                 carModel
-    //                 vinNumber
-    //                 manufacturedDate
-    //                 ageOfVehicle
-    //   }
-    // }
+   
 
-    this.apollo.watchQuery<any>(
+    this.apollo.mutate<any>(
       {
-        query: gql`{
-        allVehicals( first:100 offset:${offsetCount}  orderBy :MANUFACTURED_DATE_ASC) {
-          nodes {
-            id
-            vid
-            firstName
-            lastName
-            email
-            carMake
-            carModel
-            vinNumber
-            manufacturedDate
-            ageOfVehicle
+        mutation: gql` mutation{
+          getTable(first:"100",offsetCount:"${offsetCount}"){ 
+                        id
+                        vid
+                        firstName
+                        lastName
+                        email
+                        carMake
+                        carModel
+                        vinNumber
+                        manufacturedDate
+                        ageOfVehicle
           }
         }
-      }
       ` }
-    ).valueChanges
-      .subscribe(({ data, loading }) => {
-        console.log(data.allVehicals.nodes);
-        this.allVehicals = data.allVehicals.nodes;
+    )
+      .subscribe(({ data }) => {
+        console.log(data);
+        this.allVehicals = data.getTable;
       });
   }
 
