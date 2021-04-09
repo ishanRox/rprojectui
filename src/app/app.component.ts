@@ -259,7 +259,7 @@ export class AppComponent implements OnInit {
     // });
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    this.http.post(`"http://localhost:4000/csv/upload"`, formData,
+    this.http.post(`http://localhost:4000/csv/upload`, formData,
       {
         headers, responseType: 'text',
 
