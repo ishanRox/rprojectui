@@ -16,10 +16,7 @@ let offsetCount = 100;
 const subject = webSocket({
   url: "ws://localhost:8080",
   deserializer: (events) => {
-    // if (events.data && events.data.activities) {
-    //   console.log('your dad is here');
-    // }
-    console.log('HEREO')
+    console.log('websocket')
     return events
   }
 });
@@ -41,7 +38,8 @@ export class AppComponent implements OnInit {
   allVehicals: vehical[] = [];
 
   // socket=io("http://localhost:3000");
-
+  //2 way bind input id
+  idVal: string = '';
 
   constructor(private http: HttpClient, private apollo: Apollo) { }
 
@@ -109,9 +107,9 @@ export class AppComponent implements OnInit {
   }
 
   getCount() {
-      offsetCount = offsetCount + 100;
-      console.log(offsetCount);
-      this.getdataFromGraphql();
+    offsetCount = offsetCount + 100;
+    console.log(offsetCount);
+    this.getdataFromGraphql();
   }
 
   updateRow(id: string, fname: string, lname: string, vid: string, email: string) {
@@ -250,27 +248,35 @@ export class AppComponent implements OnInit {
         this.allVehicals = data.getTable;
       });
   }
-//________________________get the row count
-rowNoArray!: Promise<number[]>;
-getTotalCount() {
-  this.apollo.mutate<any>(
-    {
-      mutation: gql` mutation{
+  //select id
+  selectId(idval: any) {
+    console.log(idval);
+    this.idVal = idval;
+  }
+  //________________________get the row count
+  rowNoArray!: Promise<number[]>;
+  getTotalCount() {
+    this.apollo.mutate<any>(
+      {
+        mutation: gql` mutation{
         getTable(first:"10000",offsetCount:"${offsetCount}"){ 
                       id
         }
       }
     ` }
-  )
-    .subscribe(({ data }) => {
-      this.rowNoArray=Promise.resolve([...Array(data.getTable.length/100).keys()].map(e=>(e+1)*100));
-    });
-}
-//custom offset
-getdataFromGraphqlWithOffset(offset:number) {
-  this.apollo.mutate<any>(
-    {
-      mutation: gql` mutation{
+    )
+      .subscribe(({ data }) => {
+        const rowCount = (Math.floor(Math.ceil(data.getTable.length / 100) * 100 / 100));
+        this.rowNoArray = Promise.resolve([...Array(rowCount).keys()].map(e => (e + 1) * 100));
+      });
+  }
+  //custom offset
+  getdataFromGraphqlWithOffset(offset: number) {
+    offsetCount = offset;
+
+    this.apollo.mutate<any>(
+      {
+        mutation: gql` mutation{
         getTable(first:"100",offsetCount:"${offset}"){ 
                       id
                       vid
@@ -285,12 +291,12 @@ getdataFromGraphqlWithOffset(offset:number) {
         }
       }
     ` }
-  )
-    .subscribe(({ data }) => {
-      console.log(data);
-      this.allVehicals = data.getTable;
-    });
-}
+    )
+      .subscribe(({ data }) => {
+        console.log(data);
+        this.allVehicals = data.getTable;
+      });
+  }
   onFileChange(fileChangeEvent: Event) {
     const target = fileChangeEvent.target as HTMLInputElement;
     const files = target.files as FileList;
@@ -314,7 +320,7 @@ getdataFromGraphqlWithOffset(offset:number) {
     //   })
     //   .subscribe((resp: any) => {
     //     console.log(resp);
-       
+
     //     var blob = new Blob([resp], {
     //       type: "text/plain;charset=utf-8"
     //     });

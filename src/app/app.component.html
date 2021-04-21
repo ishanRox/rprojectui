@@ -107,6 +107,8 @@
   <div class="form-group mx-sm-3 mb-2">
     <label for="model" class="sr-only">Search by id </label>
     <input
+      [(ngModel)]="idVal"
+      [ngModelOptions]="{ standalone: true }"
       #idtext
       type="text"
       class="form-control"
@@ -229,70 +231,70 @@
 
 <body class="container-fluid">
   <div class="row">
-   <div class="span6" style="float: none; margin: 0 auto;">
-    <nav aria-label="navigation">
-      <ul class="pagination">
-        <li class="page-item">
-          <a
-            class="page-link"
-            [routerLink]=""
-            (click)="changeOffset('previouse')"
-            >Previous</a
+    <div class="span6" style="float: none; margin: 0 auto">
+      <nav aria-label="navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a
+              class="page-link"
+              [routerLink]=""
+              (click)="changeOffset('previouse')"
+              >Previous</a
+            >
+          </li>
+          <li
+            *ngFor="let i of rowNoArray | async; let no = index"
+            class="page-item"
           >
-        </li>
-        <li
-          *ngFor="let i of rowNoArray | async; let no = index"
-          class="page-item"
-        >
-          <a
-            class="page-link"
-            [routerLink]=""
-            (click)="getdataFromGraphqlWithOffset(i)"
-            >{{ i }}</a
-          >
-        </li>
+            <a
+              class="page-link"
+              [routerLink]=""
+              (click)="getdataFromGraphqlWithOffset(i)"
+              >{{ i }}</a
+            >
+          </li>
 
-        <li class="page-item">
-          <a class="page-link" [routerLink]="" (click)="changeOffset('next')"
-            >Next</a
-          >
-        </li>
-      </ul>
-    </nav>
-  
- </div>
-</div>
-<br />
-<hr />
-<table class="table table-dark table-hover">
-  <thead>
-    <tr>
-      <th scope="col">index</th>
-      <th scope="col">id</th>
-      <th scope="col">manufacturedDate</th>
-      <th scope="col">age</th>
-      <th scope="col">firstName</th>
-      <th scope="col">lastName</th>
-      <th scope="col">email</th>
-      <th scope="col">carMake</th>
-      <th scope="col">carModel</th>
-      <th scope="col">vinNumber</th>
-      <th scope="col">vid</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let vehical of allVehicals; let index = index">
-      <td>{{ index + 1 }}</td>
-      <td>{{ vehical.id }}</td>
-      <td>{{ vehical.manufacturedDate }}</td>
-      <td>{{ vehical.ageOfVehicle }}</td>
-      <td>{{ vehical.firstName }}</td>
-      <td>{{ vehical.lastName }}</td>
-      <td>{{ vehical.email }}</td>
-      <td>{{ vehical.carMake }}</td>
-      <td>{{ vehical.carModel }}</td>
-      <td>{{ vehical.vinNumber }}</td>
-      <td>{{ vehical.vid }}</td>
-    </tr>
-  </tbody>
-</table>
+          <li class="page-item">
+            <a class="page-link" [routerLink]="" (click)="changeOffset('next')"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <br />
+  <hr />
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th scope="col">index</th>
+        <th scope="col">id</th>
+        <th scope="col">manufacturedDate</th>
+        <th scope="col">age</th>
+        <th scope="col">firstName</th>
+        <th scope="col">lastName</th>
+        <th scope="col">email</th>
+        <th scope="col">carMake</th>
+        <th scope="col">carModel</th>
+        <th scope="col">vinNumber</th>
+        <th scope="col">vid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vehical of allVehicals; let index = index">
+        <td>{{ index + 1 }}</td>
+        <td (click)="selectId(vehical.id)">{{ vehical.id }}</td>
+        <td>{{ vehical.manufacturedDate }}</td>
+        <td>{{ vehical.ageOfVehicle }}</td>
+        <td>{{ vehical.firstName }}</td>
+        <td>{{ vehical.lastName }}</td>
+        <td>{{ vehical.email }}</td>
+        <td>{{ vehical.carMake }}</td>
+        <td>{{ vehical.carModel }}</td>
+        <td>{{ vehical.vinNumber }}</td>
+        <td>{{ vehical.vid }}</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
