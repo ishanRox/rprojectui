@@ -46,6 +46,8 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
+    this.getTotalCount();
+
     this.getdataFromGraphql();
 
     subject.pipe(
@@ -104,6 +106,12 @@ export class AppComponent implements OnInit {
       console.log(offsetCount);
       this.getdataFromGraphql();
     }
+  }
+
+  getCount() {
+      offsetCount = offsetCount + 100;
+      console.log(offsetCount);
+      this.getdataFromGraphql();
   }
 
   updateRow(id: string, fname: string, lname: string, vid: string, email: string) {
@@ -242,8 +250,47 @@ export class AppComponent implements OnInit {
         this.allVehicals = data.getTable;
       });
   }
-
-
+//________________________get the row count
+rowNoArray!: Promise<number[]>;
+getTotalCount() {
+  this.apollo.mutate<any>(
+    {
+      mutation: gql` mutation{
+        getTable(first:"10000",offsetCount:"${offsetCount}"){ 
+                      id
+        }
+      }
+    ` }
+  )
+    .subscribe(({ data }) => {
+      this.rowNoArray=Promise.resolve([...Array(data.getTable.length/100).keys()].map(e=>(e+1)*100));
+    });
+}
+//custom offset
+getdataFromGraphqlWithOffset(offset:number) {
+  this.apollo.mutate<any>(
+    {
+      mutation: gql` mutation{
+        getTable(first:"100",offsetCount:"${offset}"){ 
+                      id
+                      vid
+                      firstName
+                      lastName
+                      email
+                      carMake
+                      carModel
+                      vinNumber
+                      manufacturedDate
+                      ageOfVehicle
+        }
+      }
+    ` }
+  )
+    .subscribe(({ data }) => {
+      console.log(data);
+      this.allVehicals = data.getTable;
+    });
+}
   onFileChange(fileChangeEvent: Event) {
     const target = fileChangeEvent.target as HTMLInputElement;
     const files = target.files as FileList;
@@ -252,29 +299,27 @@ export class AppComponent implements OnInit {
   }
 
   async submitForm() {
+    console.log('upload csv');
     let formData = new FormData();
     formData.append("file", this.file!, this.file!.name!);
-    // this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
-    //   console.log(response);
-    // });
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
+      console.log(response);
+    });
+    // const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    this.http.post(`http://localhost:4000/csv/upload`, formData,
-      {
-        headers, responseType: 'text',
+    // this.http.post(`http://localhost:4000/csv/upload`, formData,
+    //   {
+    //     headers, responseType: 'text',
 
-      })
-      .subscribe((resp: any) => {
-        console.log(resp);
-        // let blob:any = new Blob([resp], { type: 'text/json; charset=utf-8' });
-        // const url = window.URL.createObjectURL(blob);
-        // window.open(url);
-        // //window.location.href = response.url;
-        var blob = new Blob([resp], {
-          type: "text/plain;charset=utf-8"
-        });
-        saveAs(blob, 'test.json');
-      }, error => console.log(error));
+    //   })
+    //   .subscribe((resp: any) => {
+    //     console.log(resp);
+       
+    //     var blob = new Blob([resp], {
+    //       type: "text/plain;charset=utf-8"
+    //     });
+    //     saveAs(blob, 'test.json');
+    //   }, error => console.log(error));
 
   }
 

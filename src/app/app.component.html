@@ -1,12 +1,6 @@
-
-
 <div class="container">
-
-  
   <table class="table table-bordered">
-    <thead>
-      
-    </thead>
+    <thead></thead>
     <tbody>
       <tr>
         <td>
@@ -40,7 +34,7 @@
         </td>
         <td>
           <div class="card" style="width: 18rem">
-            <div class="card-header"><h2> Download csv based on age</h2></div>
+            <div class="card-header"><h2>Download csv based on age</h2></div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
                 <input
@@ -69,7 +63,12 @@
                 <button
                   type="submit"
                   class="btn btn-primary mb-2"
-                  (click)="downloadCsv(greaterThanOrEqualTo.value,lessThanOrEqualTo.value)"
+                  (click)="
+                    downloadCsv(
+                      greaterThanOrEqualTo.value,
+                      lessThanOrEqualTo.value
+                    )
+                  "
                 >
                   Download csv based on given Criteria
                 </button>
@@ -202,7 +201,7 @@
 </div>
 
 <hr />
-
+<!-- 
 <div class="container-fluid">
   <div class="row">
     <div class="col">
@@ -225,6 +224,43 @@
       </button>
     </div>
   </div>
+</div> -->
+<br />
+
+<body class="container-fluid">
+  <div class="row">
+   <div class="span6" style="float: none; margin: 0 auto;">
+    <nav aria-label="navigation">
+      <ul class="pagination">
+        <li class="page-item">
+          <a
+            class="page-link"
+            [routerLink]=""
+            (click)="changeOffset('previouse')"
+            >Previous</a
+          >
+        </li>
+        <li
+          *ngFor="let i of rowNoArray | async; let no = index"
+          class="page-item"
+        >
+          <a
+            class="page-link"
+            [routerLink]=""
+            (click)="getdataFromGraphqlWithOffset(i)"
+            >{{ i }}</a
+          >
+        </li>
+
+        <li class="page-item">
+          <a class="page-link" [routerLink]="" (click)="changeOffset('next')"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
+  
+ </div>
 </div>
 <br />
 <hr />
