@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { bufferCount, buffer } from 'rxjs/operators'
 import { concatMap, delay } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
+import { SocketClusterClientService } from './socket-cluster-client.service';
 let offsetCount = 100;
 
 const subject = webSocket({
@@ -41,9 +42,15 @@ export class AppComponent implements OnInit {
   //2 way bind input id
   idVal: string = '';
 
-  constructor(private http: HttpClient, private apollo: Apollo) { }
+  socket: any;
+
+  constructor(private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
+    this.socketCluster.connectToSocketCluster();
+
+    // this.setupSocketConnection();
+
     this.getTotalCount();
 
     this.getdataFromGraphql();
@@ -61,7 +68,9 @@ export class AppComponent implements OnInit {
 
   }
 
-
+  // setupSocketConnection() {
+  //    this.socket = io('localhost:9898');
+  // }
   exportCsv() {
     console.log('message sended');
     this.apollo.watchQuery<any>(

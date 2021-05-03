@@ -1,0 +1,29 @@
+<td>
+    <div class="card" style="width: 18rem">
+      <div class="card-header">
+        <h1>upload csv</h1>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <input
+            type="file"
+            class="file-input"
+            (change)="onFileChange($event)"
+            #fileUpload
+          />
+        </li>
+        <li class="list-group-item">
+          <div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="submitForm()"
+            >
+              upload csv
+            </button>
+          </div>
+        </li>
+        <li class="list-group-item"></li>
+      </ul>
+    </div>
+  </td>
