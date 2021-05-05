@@ -12,6 +12,10 @@ import { bufferCount, buffer } from 'rxjs/operators'
 import { concatMap, delay } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 import { SocketClusterClientService } from './socket-cluster-client.service';
+import { increment, passId } from './state/counter.actions';
+import { Store } from '@ngrx/store';
+import { getVehicals } from './state/vehicalstate/vehical.actions';
+
 let offsetCount = 100;
 
 const subject = webSocket({
@@ -44,7 +48,7 @@ export class AppComponent implements OnInit {
 
   socket: any;
 
-  constructor(private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
+  constructor(private store: Store<{ counter: { counter: number } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
     this.socketCluster.connectToSocketCluster();
@@ -67,7 +71,10 @@ export class AppComponent implements OnInit {
     );
 
   }
-
+  increment() {
+    this.store.dispatch(increment());
+    this.store.dispatch(getVehicals())
+  }
   // setupSocketConnection() {
   //    this.socket = io('localhost:9898');
   // }
@@ -260,6 +267,7 @@ export class AppComponent implements OnInit {
   //select id
   selectId(idval: any) {
     console.log(idval);
+    this.store.dispatch(passId({idVal:idval}));
     this.idVal = idval;
   }
   //________________________get the row count

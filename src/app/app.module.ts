@@ -6,14 +6,23 @@ import { AppComponent } from './app.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { GraphQLModule } from './graphql.module';
 import { UploadComponent } from './upload/upload.component';
-
+import { DownloadComponent } from './download/download.component';
+import { SearchbyidComponent } from './searchbyid/searchbyid.component';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './state/counter.reducer';
+import { vehicalReducer } from './state/vehicalstate/vehical.reducer';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UploadComponent
+    UploadComponent,
+    DownloadComponent,
+    SearchbyidComponent
   ],
-  imports: [
+  imports: [StoreModule.forRoot({
+    counter: counterReducer,
+    getV:vehicalReducer
+  }),
     FormsModule,
     BrowserModule,
     AppRoutingModule,

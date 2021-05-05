@@ -1,0 +1,44 @@
+<td>
+    <div class="card" style="width: 18rem">
+      <div class="card-header"><h2>Download csv based on age</h2></div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <input
+            #lessThanOrEqualTo
+            type="text"
+            class="form-control"
+            id="model"
+            placeholder="lessThanOrEqualTo"
+          />
+          <hr />
+          lessThanOrEqualTo
+        </li>
+        <li class="list-group-item">
+          <input
+            #greaterThanOrEqualTo
+            type="text"
+            class="form-control"
+            id="model"
+            placeholder="greaterThanOrEqualTo"
+          />
+          <hr />
+          greaterThanOrEqualTo
+        </li>
+
+        <li class="list-group-item">
+          <button
+            type="submit"
+            class="btn btn-primary mb-2"
+            (click)="
+              downloadCsv(
+                greaterThanOrEqualTo.value,
+                lessThanOrEqualTo.value
+              )
+            "
+          >
+            Download csv based on given Criteria
+          </button>
+        </li>
+      </ul>
+    </div>
+  </td>
