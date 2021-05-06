@@ -47,11 +47,12 @@ export class AppComponent implements OnInit {
   idVal: string = '';
 
   socket: any;
-
+  //unique channel for communication
+  uidChannel=Date.now().toString(36) + Math.random().toString(36).substr(2);
   constructor(private store: Store<{ counter: { counter: number } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
-    this.socketCluster.connectToSocketCluster();
+    this.socketCluster.connectToSocketCluster(this.uidChannel);
 
     // this.setupSocketConnection();
 
@@ -65,7 +66,9 @@ export class AppComponent implements OnInit {
           delay(10000))
       )
     ).subscribe(
-      (msg) => { console.log(msg); alert(msg.data); },
+      (msg) => { console.log(msg); 
+      //  alert(msg.data);
+       },
       (err) => console.log(err),
       () => console.log('complete')
     );
