@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { passId, reset } from './counter.actions';
-import { decrement } from './counter.actions';
+import { passId } from './counter.actions';
+
 import { increment } from './counter.actions';
 import { initialState } from './counter.state';
 
@@ -16,20 +16,7 @@ const _counterReducer = createReducer(initialState,
       allVehicals: []
     };
   })
-  ,
-  on(decrement, (state) => {
-    return {
-      ...state,
-      counter: state.counter - 1,
-    }
-  })
-  ,
-  on(reset, (state) => {
-    return {
-      ...state,
-      counter: 0,
-    }
-  }),
+ ,
   on(passId, (state, action) => {
     console.log(action);
     console.log('_'.repeat(20))
@@ -40,6 +27,7 @@ const _counterReducer = createReducer(initialState,
       counter: 0,
     }
   })
+
 );
 
 

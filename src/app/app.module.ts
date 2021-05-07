@@ -20,8 +20,9 @@ import { vehicalReducer } from './state/vehicalstate/vehical.reducer';
     SearchbyidComponent
   ],
   imports: [StoreModule.forRoot({
-    counter: counterReducer,
-    getV:vehicalReducer
+    getV:vehicalReducer,
+    count: counterReducer
+   
   }),
     FormsModule,
     BrowserModule,

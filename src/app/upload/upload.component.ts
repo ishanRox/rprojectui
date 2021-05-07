@@ -25,21 +25,6 @@ export class UploadComponent implements OnInit {
     this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
       console.log(response);
     });
-    // const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    // this.http.post(`http://localhost:4000/csv/upload`, formData,
-    //   {
-    //     headers, responseType: 'text',
-
-    //   })
-    //   .subscribe((resp: any) => {
-    //     console.log(resp);
-
-    //     var blob = new Blob([resp], {
-    //       type: "text/plain;charset=utf-8"
-    //     });
-    //     saveAs(blob, 'test.json');
-    //   }, error => console.log(error));
 
   }
 

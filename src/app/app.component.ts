@@ -18,13 +18,7 @@ import { getVehicals } from './state/vehicalstate/vehical.actions';
 
 let offsetCount = 100;
 
-const subject = webSocket({
-  url: "ws://localhost:8080",
-  deserializer: (events) => {
-    console.log('websocket')
-    return events
-  }
-});
+
 
 @Component({
   selector: 'app-root',
@@ -48,10 +42,11 @@ export class AppComponent implements OnInit {
 
   socket: any;
   //unique channel for communication
-  uidChannel=Date.now().toString(36) + Math.random().toString(36).substr(2);
-  constructor(private store: Store<{ counter: { counter: number } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
+  uidChannel = Date.now().toString(36) + Math.random().toString(36).substr(2);
+  constructor(private store: Store<{ getV: { allVehicals: [] } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
+
     this.socketCluster.connectToSocketCluster(this.uidChannel);
 
     // this.setupSocketConnection();
@@ -59,28 +54,19 @@ export class AppComponent implements OnInit {
     this.getTotalCount();
 
     this.getdataFromGraphql();
-
-    subject.pipe(
-      concatMap(x => of(x)
-        .pipe(
-          delay(10000))
-      )
-    ).subscribe(
-      (msg) => { console.log(msg); 
-      //  alert(msg.data);
-       },
-      (err) => console.log(err),
-      () => console.log('complete')
-    );
-
+    this.store.select('getV').subscribe(data => {
+      console.log('____________________________________________')
+      console.table(data);
+      this.allVehicals=data.allVehicals;
+      console.log('________________________________________')
+    });
   }
+
+
   increment() {
     this.store.dispatch(increment());
-    this.store.dispatch(getVehicals())
   }
-  // setupSocketConnection() {
-  //    this.socket = io('localhost:9898');
-  // }
+
   exportCsv() {
     console.log('message sended');
     this.apollo.watchQuery<any>(
@@ -98,7 +84,6 @@ export class AppComponent implements OnInit {
     ).valueChanges
       .subscribe(({ data, loading }) => {
         console.log(data);
-        // this.allVehicals = data.allVehicals.nodes;
       });
 
   }
@@ -212,7 +197,8 @@ export class AppComponent implements OnInit {
     )
       .subscribe(({ data }) => {
         console.log(data);
-        this.allVehicals = data.searchModelFromGraphql;
+        //this.allVehicals = data.searchModelFromGraphql;
+        this.store.dispatch(getVehicals({ vehical: data.searchModelFromGraphql }));
       });
   }
 
@@ -239,7 +225,8 @@ export class AppComponent implements OnInit {
     )
       .subscribe(({ data }) => {
         console.log(data);
-        this.allVehicals = [data.getTableById];
+        // this.allVehicals = [data.getTableById];
+        this.store.dispatch(getVehicals({ vehical: [data.getTableById] }));
       });
   }
 
@@ -264,13 +251,15 @@ export class AppComponent implements OnInit {
     )
       .subscribe(({ data }) => {
         console.log(data);
-        this.allVehicals = data.getTable;
+        //this.allVehicals = data.getTable;
+        this.store.dispatch(getVehicals({ vehical: data.getTable }));
+
       });
   }
   //select id
   selectId(idval: any) {
     console.log(idval);
-    this.store.dispatch(passId({idVal:idval}));
+    this.store.dispatch(passId({ idVal: idval }));
     this.idVal = idval;
   }
   //________________________get the row count
@@ -314,7 +303,8 @@ export class AppComponent implements OnInit {
     )
       .subscribe(({ data }) => {
         console.log(data);
-        this.allVehicals = data.getTable;
+        // this.allVehicals = data.getTable;
+        this.store.dispatch(getVehicals({ vehical: data.getTable }));
       });
   }
   onFileChange(fileChangeEvent: Event) {
@@ -331,22 +321,6 @@ export class AppComponent implements OnInit {
     this.http.post("http://localhost:4000/csv/upload", formData).subscribe((response) => {
       console.log(response);
     });
-    // const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    // this.http.post(`http://localhost:4000/csv/upload`, formData,
-    //   {
-    //     headers, responseType: 'text',
-
-    //   })
-    //   .subscribe((resp: any) => {
-    //     console.log(resp);
-
-    //     var blob = new Blob([resp], {
-    //       type: "text/plain;charset=utf-8"
-    //     });
-    //     saveAs(blob, 'test.json');
-    //   }, error => console.log(error));
-
   }
 
 }
