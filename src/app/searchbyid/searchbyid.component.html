@@ -1,22 +1,22 @@
 
 <form class="form-inline">
-    <div class="form-group mx-sm-3 mb-2">
-      <label for="model" class="sr-only">Search by id </label>
-      <input
-        [(ngModel)]="idVal"
-        [ngModelOptions]="{ standalone: true }"
-        #idtext
-        type="text"
-        class="form-control"
-        id="model"
-        placeholder="Search by id"
-      />
-    </div>
-    <button
-      type="submit"
-      class="btn btn-primary mb-2"
-      (click)="searchIdFromGraphql(idtext.value)"
-    >
-      Search by id Number
-    </button>
-  </form>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="model" class="sr-only">Search by id </label>
+    <input
+      [(ngModel)]="idVal"
+      [ngModelOptions]="{ standalone: true }"
+      #idtext
+      type="text"
+      class="form-control"
+      id="model"
+      placeholder="Search by id"
+    />
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary mb-2"
+    (click)="searchIdFromGraphql()"
+  >
+    Search by id Number
+  </button>
+</form>

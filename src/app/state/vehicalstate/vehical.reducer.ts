@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { initialState } from '../counter.state';
+import { initialState } from '../main.state';
 import { getVehicals } from './vehical.actions';
 
 

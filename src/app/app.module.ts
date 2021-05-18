@@ -9,19 +9,21 @@ import { UploadComponent } from './upload/upload.component';
 import { DownloadComponent } from './download/download.component';
 import { SearchbyidComponent } from './searchbyid/searchbyid.component';
 import { StoreModule } from '@ngrx/store';
-import { counterReducer } from './state/counter.reducer';
 import { vehicalReducer } from './state/vehicalstate/vehical.reducer';
+import { SearchByModelComponent } from './search-by-model/search-by-model.component';
+import { mainReducer } from './state/main.reducer';
 
 @NgModule({
   declarations: [
     AppComponent,
     UploadComponent,
     DownloadComponent,
-    SearchbyidComponent
+    SearchbyidComponent,
+    SearchByModelComponent
   ],
   imports: [StoreModule.forRoot({
     getV:vehicalReducer,
-    count: counterReducer
+    main: mainReducer
    
   }),
     FormsModule,

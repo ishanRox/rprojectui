@@ -1,18 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-//import { webSocket } from 'rxjs/websocket'
-import { SocketService } from './socket.service';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+//import { webSocket } from 'rxjs/websocket';
+import { HttpClient } from "@angular/common/http";
 import { Apollo, gql } from 'apollo-angular';
-import { query } from '@angular/animations';
 import { vehical } from './models/vehical';
-import { io } from 'socket.io-client';
-import { webSocket } from 'rxjs/webSocket';
-import { of } from 'rxjs';
-import { bufferCount, buffer } from 'rxjs/operators'
-import { concatMap, delay } from 'rxjs/operators';
-import { saveAs } from 'file-saver';
 import { SocketClusterClientService } from './socket-cluster-client.service';
-import { increment, passId } from './state/counter.actions';
+import { increment, passId } from './state/main.actions';
 import { Store } from '@ngrx/store';
 import { getVehicals } from './state/vehicalstate/vehical.actions';
 
@@ -36,30 +28,36 @@ export class AppComponent implements OnInit {
   //vehicals array
   allVehicals: vehical[] = [];
 
-  // socket=io("http://localhost:3000");
   //2 way bind input id
   idVal: string = '';
 
   socket: any;
   //unique channel for communication
   uidChannel = Date.now().toString(36) + Math.random().toString(36).substr(2);
-  constructor(private store: Store<{ getV: { allVehicals: [] } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
+  constructor(private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
   ngOnInit(): void {
 
     this.socketCluster.connectToSocketCluster(this.uidChannel);
-
-    // this.setupSocketConnection();
 
     this.getTotalCount();
 
     this.getdataFromGraphql();
     this.store.select('getV').subscribe(data => {
       console.log('____________________________________________')
-      console.table(data);
-      this.allVehicals=data.allVehicals;
+      console.table('vehical Data');
+      this.allVehicals = data.allVehicals;
       console.log('________________________________________')
     });
+
+    this.store.select('main').subscribe(data => {
+      console.log('____________________________________________')
+      console.table('main Data');
+      console.log(data.id);
+      this.idVal = data.id;
+      console.log('________________________________________')
+    });
+
   }
 
 
@@ -116,7 +114,8 @@ export class AppComponent implements OnInit {
     this.getdataFromGraphql();
   }
 
-  updateRow(id: string, fname: string, lname: string, vid: string, email: string) {
+  updateRow(fname: string, lname: string, vid: string, email: string) {
+    const id = this.idVal;
     console.log(id, fname, lname, vid, email);
     this.apollo.mutate<any>(
       {
@@ -134,17 +133,17 @@ export class AppComponent implements OnInit {
       .subscribe(({ data }) => {
         console.log(data);
         alert('update successfull');
-        this.searchIdFromGraphql(id);
+        this.searchIdFromGraphql();
       });
   }
 
-  deleteVehicalById(model: string) {
-    console.log(model);
-    model = model.trim();
+  deleteVehicalById() {
+   //to acces in inner object 
+    const id=this.idVal; 
     this.apollo.mutate<any>(
       {
         mutation: gql`mutation{
-          deleteVehicalById(id:"${model}"  ){
+          deleteVehicalById(id:"${id}"  ){
             id
                         vid
                         firstName
@@ -160,7 +159,7 @@ export class AppComponent implements OnInit {
         }
       `
         ,
-        variables: { model }
+        variables: { id }
       }
     )
       .subscribe(({ data }) => {
@@ -203,11 +202,12 @@ export class AppComponent implements OnInit {
   }
 
 
-  searchIdFromGraphql(model: string) {
+  searchIdFromGraphql() {
+
     this.apollo.mutate<any>(
       {
         mutation: gql`mutation{
-          getTableById(id:"${model}"){ 
+          getTableById(id:"${this.idVal}"){ 
                         id
                         vid
                         firstName
@@ -256,11 +256,12 @@ export class AppComponent implements OnInit {
 
       });
   }
+
   //select id
   selectId(idval: any) {
     console.log(idval);
     this.store.dispatch(passId({ idVal: idval }));
-    this.idVal = idval;
+    // this.idVal = idval;
   }
   //________________________get the row count
   rowNoArray!: Promise<number[]>;

@@ -1,0 +1,19 @@
+<form class="form-inline">
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="model" class="sr-only">Search by Model</label>
+    <input
+      #modelval
+      type="text"
+      class="form-control"
+      id="model"
+      placeholder="Search by Model"
+    />
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary mb-2"
+    (click)="searchModelFromGraphql(modelval.value)"
+  >
+    Search by Model
+  </button>
+</form>

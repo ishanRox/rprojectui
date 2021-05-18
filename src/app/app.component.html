@@ -3,10 +3,10 @@
     <thead></thead>
     <tbody>
       <tr>
-<button (click)="increment()">click</button>
+        <button (click)="increment()">click</button>
         <app-upload></app-upload>
         <td></td>
-        <app-download  [uidChannel]="uidChannel"></app-download>
+        <app-download [uidChannel]="uidChannel"></app-download>
       </tr>
     </tbody>
   </table>
@@ -14,26 +14,8 @@
 
 <hr />
 
-<form class="form-inline">
-  <div class="form-group mx-sm-3 mb-2">
-    <label for="model" class="sr-only">Search by Model</label>
-    <input
-      #modelval
-      type="text"
-      class="form-control"
-      id="model"
-      placeholder="Search by Model"
-    />
-  </div>
-  <button
-    type="submit"
-    class="btn btn-primary mb-2"
-    (click)="searchModelFromGraphql(modelval.value)"
-  >
-    Search by Model
-  </button>
-</form>
-
+<app-search-by-model></app-search-by-model>
+<!-- 
 <form class="form-inline">
   <div class="form-group mx-sm-3 mb-2">
     <label for="model" class="sr-only">Search by id </label>
@@ -50,12 +32,12 @@
   <button
     type="submit"
     class="btn btn-primary mb-2"
-    (click)="searchIdFromGraphql(idtext.value)"
+    (click)="searchIdFromGraphql()"
   >
     Search by id Number
   </button>
-</form>
-
+</form> -->
+<app-searchbyid></app-searchbyid>
 <form class="form-inline">
   <div class="form-group mx-sm-3 mb-2">
     <div class="row">
@@ -110,7 +92,6 @@
         class="btn btn-secondary btn-lg btn-block"
         (click)="
           updateRow(
-            idtext.value,
             fname.value,
             lname.value,
             vid.value,
@@ -125,7 +106,7 @@
       <button
         type="button"
         class="btn btn-secondary btn-lg btn-block"
-        (click)="deleteVehicalById(idtext.value)"
+        (click)="deleteVehicalById()"
       >
         Delete row with current id
       </button>
@@ -157,7 +138,7 @@
               class="page-link"
               [routerLink]=""
               (click)="getdataFromGraphqlWithOffset(i)"
-              >{{ i/100 }}</a
+              >{{ i / 100 }}</a
             >
           </li>
 
