@@ -11,112 +11,12 @@
     </tbody>
   </table>
 </div>
-
 <hr />
-
 <app-search-by-model></app-search-by-model>
-<!-- 
-<form class="form-inline">
-  <div class="form-group mx-sm-3 mb-2">
-    <label for="model" class="sr-only">Search by id </label>
-    <input
-      [(ngModel)]="idVal"
-      [ngModelOptions]="{ standalone: true }"
-      #idtext
-      type="text"
-      class="form-control"
-      id="model"
-      placeholder="Search by id"
-    />
-  </div>
-  <button
-    type="submit"
-    class="btn btn-primary mb-2"
-    (click)="searchIdFromGraphql()"
-  >
-    Search by id Number
-  </button>
-</form> -->
 <app-searchbyid></app-searchbyid>
-<form class="form-inline">
-  <div class="form-group mx-sm-3 mb-2">
-    <div class="row">
-      <div class="col-sm">
-        <label for="model" class="sr-only">FirstName</label>
-        <input
-          #fname
-          type="text"
-          class="form-control"
-          id="model"
-          placeholder="FirstName"
-        />
-      </div>
-      <div class="col-sm">
-        <label for="model" class="sr-only">LastName</label>
-        <input
-          #lname
-          type="text"
-          class="form-control"
-          id="model"
-          placeholder="LastName"
-        />
-      </div>
-      <div class="col-sm">
-        <label for="model" class="sr-only">Email</label>
-        <input
-          #email
-          type="text"
-          class="form-control"
-          id="model"
-          placeholder="Email"
-        />
-      </div>
-      <div class="col-sm">
-        <label for="model" class="sr-only">vid</label>
-        <input
-          #vid
-          type="text"
-          class="form-control"
-          id="model"
-          placeholder="vid"
-        />
-      </div>
-    </div>
-  </div>
-</form>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm">
-      <button
-        type="button"
-        class="btn btn-secondary btn-lg btn-block"
-        (click)="
-          updateRow(
-            fname.value,
-            lname.value,
-            vid.value,
-            email.value
-          )
-        "
-      >
-        Update row with current id
-      </button>
-    </div>
-    <div class="col-sm">
-      <button
-        type="button"
-        class="btn btn-secondary btn-lg btn-block"
-        (click)="deleteVehicalById()"
-      >
-        Delete row with current id
-      </button>
-    </div>
-  </div>
-</div>
-
+<app-update-component></app-update-component>
 <hr />
 <br />
-
 <body class="container-fluid">
   <div class="row">
     <div class="span6" style="float: none; margin: 0 auto">

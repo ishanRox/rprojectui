@@ -12,6 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { vehicalReducer } from './state/vehicalstate/vehical.reducer';
 import { SearchByModelComponent } from './search-by-model/search-by-model.component';
 import { mainReducer } from './state/main.reducer';
+import { UpdateComponentComponent } from './update-component/update-component.component';
+import { DeleteComponentComponent } from './delete-component/delete-component.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { mainReducer } from './state/main.reducer';
     UploadComponent,
     DownloadComponent,
     SearchbyidComponent,
-    SearchByModelComponent
+    SearchByModelComponent,
+    UpdateComponentComponent,
+    DeleteComponentComponent
   ],
   imports: [StoreModule.forRoot({
     getV:vehicalReducer,
