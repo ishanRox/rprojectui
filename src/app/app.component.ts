@@ -10,8 +10,6 @@ import { getVehicals } from './state/vehicalstate/vehical.actions';
 
 let offsetCount = 100;
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -43,6 +41,7 @@ export class AppComponent implements OnInit {
     this.getTotalCount();
 
     this.getdataFromGraphql();
+
     this.store.select('getV').subscribe(data => {
       console.log('____________________________________________')
       console.table('vehical Data');
@@ -60,38 +59,8 @@ export class AppComponent implements OnInit {
 
   }
 
-
   increment() {
     this.store.dispatch(increment());
-  }
-
-  exportCsv() {
-    console.log('message sended');
-    this.apollo.watchQuery<any>(
-      {
-        query: gql`query{
-  
-          messages{
-            id
-            description
-          }
-        }   
-      `
-
-      }
-    ).valueChanges
-      .subscribe(({ data, loading }) => {
-        console.log(data);
-      });
-
-  }
-
-  downloadCsv(higher: string, lower: string) {
-
-    this.http.get(`http://localhost:3000/download/?higher=${higher}&lower=${lower}`).subscribe((response) => {
-      console.log(response);
-    });
-    console.log(lower, higher);
   }
 
   changeOffset(previouseOrNext: string) {
@@ -112,122 +81,6 @@ export class AppComponent implements OnInit {
     offsetCount = offsetCount + 100;
     console.log(offsetCount);
     this.getdataFromGraphql();
-  }
-
-  updateRow(fname: string, lname: string, vid: string, email: string) {
-    const id = this.idVal;
-    console.log(id, fname, lname, vid, email);
-    this.apollo.mutate<any>(
-      {
-        mutation: gql`mutation {
-          updateRow(id: "${id}", fname: "${fname}", lname: "${lname}", vid: "${vid}", email: "${email}") {
-            ageOfVehicle
-            firstName
-          }
-        }
-        
-      ` ,
-        variables: { id }
-      }
-    )
-      .subscribe(({ data }) => {
-        console.log(data);
-        alert('update successfull');
-        this.searchIdFromGraphql();
-      });
-  }
-
-  deleteVehicalById() {
-   //to acces in inner object 
-    const id=this.idVal; 
-    this.apollo.mutate<any>(
-      {
-        mutation: gql`mutation{
-          deleteVehicalById(id:"${id}"  ){
-            id
-                        vid
-                        firstName
-                        lastName
-                        email
-                        carMake
-                        carModel
-                        vinNumber
-                        manufacturedDate
-                        ageOfVehicle
-          }
-          
-        }
-      `
-        ,
-        variables: { id }
-      }
-    )
-      .subscribe(({ data }) => {
-        console.log(data);
-        alert('Delete successfull');
-        this.changeOffset('next');
-      });
-
-  }
-
-
-  searchModelFromGraphql(model: string) {
-    model = model.trim();
-    model = model.replace('*', '%');
-
-    this.apollo.mutate<any>(
-      {
-        mutation: gql`mutation{
-          searchModelFromGraphql(model:"${model}"  ){
-                         id
-                        vid
-                        firstName
-                        lastName
-                        email
-                        carMake
-                        carModel
-                        vinNumber
-                        manufacturedDate
-                        ageOfVehicle
-          }
-          
-        }
-      ` }
-    )
-      .subscribe(({ data }) => {
-        console.log(data);
-        //this.allVehicals = data.searchModelFromGraphql;
-        this.store.dispatch(getVehicals({ vehical: data.searchModelFromGraphql }));
-      });
-  }
-
-
-  searchIdFromGraphql() {
-
-    this.apollo.mutate<any>(
-      {
-        mutation: gql`mutation{
-          getTableById(id:"${this.idVal}"){ 
-                        id
-                        vid
-                        firstName
-                        lastName
-                        email
-                        carMake
-                        carModel
-                        vinNumber
-                        manufacturedDate
-                        ageOfVehicle
-                        
-          }
-        }
-      ` }
-    )
-      .subscribe(({ data }) => {
-        console.log(data);
-        // this.allVehicals = [data.getTableById];
-        this.store.dispatch(getVehicals({ vehical: [data.getTableById] }));
-      });
   }
 
   getdataFromGraphql() {
@@ -257,13 +110,6 @@ export class AppComponent implements OnInit {
       });
   }
 
-  //select id
-  selectId(idval: any) {
-    console.log(idval);
-    this.store.dispatch(passId({ idVal: idval }));
-    // this.idVal = idval;
-  }
-  //________________________get the row count
   rowNoArray!: Promise<number[]>;
   getTotalCount() {
     this.apollo.mutate<any>(
@@ -280,6 +126,7 @@ export class AppComponent implements OnInit {
         this.rowNoArray = Promise.resolve([...Array(rowCount).keys()].map(e => (e + 1) * 100));
       });
   }
+
   //custom offset
   getdataFromGraphqlWithOffset(offset: number) {
     offsetCount = offset;
@@ -308,6 +155,7 @@ export class AppComponent implements OnInit {
         this.store.dispatch(getVehicals({ vehical: data.getTable }));
       });
   }
+
   onFileChange(fileChangeEvent: Event) {
     const target = fileChangeEvent.target as HTMLInputElement;
     const files = target.files as FileList;

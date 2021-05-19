@@ -1,60 +1,60 @@
 <form class="form-inline">
-    <div class="form-group mx-sm-3 mb-2">
-      <div class="row">
-        <div class="col-sm">
-          <label for="model" class="sr-only">FirstName</label>
-          <input
-            #fname
-            type="text"
-            class="form-control"
-            id="model"
-            placeholder="FirstName"
-          />
-        </div>
-        <div class="col-sm">
-          <label for="model" class="sr-only">LastName</label>
-          <input
-            #lname
-            type="text"
-            class="form-control"
-            id="model"
-            placeholder="LastName"
-          />
-        </div>
-        <div class="col-sm">
-          <label for="model" class="sr-only">Email</label>
-          <input
-            #email
-            type="text"
-            class="form-control"
-            id="model"
-            placeholder="Email"
-          />
-        </div>
-        <div class="col-sm">
-          <label for="model" class="sr-only">vid</label>
-          <input
-            #vid
-            type="text"
-            class="form-control"
-            id="model"
-            placeholder="vid"
-          />
-        </div>
-      </div>
-    </div>
-  </form>
-  <div class="container-fluid">
+  <div class="form-group mx-sm-3 mb-2">
     <div class="row">
       <div class="col-sm">
-        <button
-          type="button"
-          class="btn btn-secondary btn-lg btn-block"
-          (click)="updateRow(fname.value, lname.value, vid.value, email.value)"
-        >
-          Update row with current id
-        </button>
+        <label for="model" class="sr-only">FirstName</label>
+        <input
+          #fname
+          type="text"
+          class="form-control"
+          id="model"
+          placeholder="FirstName"
+        />
       </div>
-      <app-delete-component></app-delete-component>
+      <div class="col-sm">
+        <label for="model" class="sr-only">LastName</label>
+        <input
+          #lname
+          type="text"
+          class="form-control"
+          id="model"
+          placeholder="LastName"
+        />
+      </div>
+      <div class="col-sm">
+        <label for="model" class="sr-only">Email</label>
+        <input
+          #email
+          type="text"
+          class="form-control"
+          id="model"
+          placeholder="Email"
+        />
+      </div>
+      <div class="col-sm">
+        <label for="model" class="sr-only">vid</label>
+        <input
+          #vid
+          type="text"
+          class="form-control"
+          id="model"
+          placeholder="vid"
+        />
+      </div>
     </div>
   </div>
+</form>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm">
+      <button
+        type="button"
+        class="btn btn-secondary btn-lg btn-block"
+        (click)="updateRow(fname.value, lname.value, vid.value, email.value)"
+      >
+        Update row with current id
+      </button>
+    </div>
+    <app-delete-component></app-delete-component>
+  </div>
+</div>

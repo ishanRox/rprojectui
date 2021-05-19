@@ -11,10 +11,9 @@ export class DownloadComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
-  }
-  downloadCsv(higher: string, lower: string) {
+  ngOnInit(): void { }
 
+  downloadCsv(higher: string, lower: string) {
     this.http.get(`http://localhost:3000/download/?higher=${higher}&lower=${lower}&uidChannel=${this.uidChannel}`).subscribe((response) => {
       // console.log(response);
     });

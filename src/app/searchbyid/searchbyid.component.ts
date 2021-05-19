@@ -13,16 +13,12 @@ import { getVehicals } from '../state/vehicalstate/vehical.actions';
 export class SearchbyidComponent implements OnInit {
   idVal: string = '';
 
- 
   //vehicals array
   allVehicals: vehical[] = [];
-  
-  constructor( private http: HttpClient, private apollo: Apollo,private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>) { }
 
-
+  constructor(private http: HttpClient, private apollo: Apollo, private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>) { }
 
   ngOnInit(): void {
-
     this.store.select('main').subscribe(data => {
       console.log('____________________________________________')
       console.table('main Data');
@@ -33,8 +29,8 @@ export class SearchbyidComponent implements OnInit {
   }
 
 
- 
-  
+
+
   searchIdFromGraphql() {
 
     this.apollo.mutate<any>(

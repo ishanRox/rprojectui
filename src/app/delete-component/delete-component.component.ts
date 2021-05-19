@@ -9,8 +9,8 @@ import { passId } from '../state/main.actions';
   styleUrls: ['./delete-component.component.css']
 })
 export class DeleteComponentComponent implements OnInit {
- //2 way bind input id
- idVal: string = '';
+  //2 way bind input id
+  idVal: string = '';
   constructor(private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>, private apollo: Apollo) { }
 
   ngOnInit(): void {
@@ -23,13 +23,12 @@ export class DeleteComponentComponent implements OnInit {
     });
   }
 
-  
   deleteVehicalById() {
     //to acces in inner object 
-     const id=this.idVal; 
-     this.apollo.mutate<any>(
-       {
-         mutation: gql`mutation{
+    const id = this.idVal;
+    this.apollo.mutate<any>(
+      {
+        mutation: gql`mutation{
            deleteVehicalById(id:"${id}"  ){
              id
                          vid
@@ -45,16 +44,16 @@ export class DeleteComponentComponent implements OnInit {
            
          }
        `
-         ,
-         variables: { id }
-       }
-     )
-       .subscribe(({ data }) => {
-         console.log(data);
-         alert('Delete successfull');
-         this.store.dispatch(passId({ idVal: "" }));
+        ,
+        variables: { id }
+      }
+    )
+      .subscribe(({ data }) => {
+        console.log(data);
+        alert('Delete successfull');
+        // this.store.dispatch(passId({ idVal: "" }));
         // this.changeOffset('next');
-       });
- 
-   }
+      });
+
+  }
 }

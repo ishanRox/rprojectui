@@ -14,6 +14,8 @@ import { SearchByModelComponent } from './search-by-model/search-by-model.compon
 import { mainReducer } from './state/main.reducer';
 import { UpdateComponentComponent } from './update-component/update-component.component';
 import { DeleteComponentComponent } from './delete-component/delete-component.component';
+import { VehicalComponentComponent } from './vehical-component/vehical-component.component';
+import { NotificationComponentComponent } from './notification-component/notification-component.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { DeleteComponentComponent } from './delete-component/delete-component.co
     SearchbyidComponent,
     SearchByModelComponent,
     UpdateComponentComponent,
-    DeleteComponentComponent
+    DeleteComponentComponent,
+    VehicalComponentComponent,
+    NotificationComponentComponent
   ],
   imports: [StoreModule.forRoot({
     getV:vehicalReducer,

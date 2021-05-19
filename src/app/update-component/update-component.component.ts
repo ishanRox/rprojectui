@@ -10,21 +10,20 @@ import { getVehicals } from '../state/vehicalstate/vehical.actions';
 })
 export class UpdateComponentComponent implements OnInit {
 
-//2 way bind input id
-idVal: string = '';
-constructor(private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>, private apollo: Apollo) { }
+  //2 way bind input id
+  idVal: string = '';
+  constructor(private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>, private apollo: Apollo) { }
 
-ngOnInit(): void {
-  this.store.select('main').subscribe(data => {
-    console.log('____________________________________________')
-    console.table('main Data');
-    console.log(data.id);
-    this.idVal = data.id;
-    console.log('________________________________________')
-  });
-}
+  ngOnInit(): void {
+    this.store.select('main').subscribe(data => {
+      console.log('____________________________________________')
+      console.table('main Data');
+      console.log(data.id);
+      this.idVal = data.id;
+      console.log('________________________________________')
+    });
+  }
 
-  
   updateRow(fname: string, lname: string, vid: string, email: string) {
     const id = this.idVal;
     console.log(id, fname, lname, vid, email);
@@ -48,8 +47,6 @@ ngOnInit(): void {
       });
   }
 
-
-  
   searchIdFromGraphql() {
 
     this.apollo.mutate<any>(
