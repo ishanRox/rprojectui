@@ -7,6 +7,7 @@ import { SocketClusterClientService } from './socket-cluster-client.service';
 import { increment, passId } from './state/main.actions';
 import { Store } from '@ngrx/store';
 import { getVehicals } from './state/vehicalstate/vehical.actions';
+import { ToastrService } from 'ngx-toastr';
 
 let offsetCount = 100;
 
@@ -34,8 +35,10 @@ export class AppComponent implements OnInit {
   uidChannel = Date.now().toString(36) + Math.random().toString(36).substr(2);
   constructor(private store: Store<{ getV: { allVehicals: [] }, main: { id: string } }>, private socketCluster: SocketClusterClientService, private http: HttpClient, private apollo: Apollo) { }
 
-  ngOnInit(): void {
 
+
+  ngOnInit(): void {
+  
     this.socketCluster.connectToSocketCluster(this.uidChannel);
 
     this.getTotalCount();

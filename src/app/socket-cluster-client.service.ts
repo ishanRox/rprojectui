@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 (window as any).global = window;
@@ -14,7 +15,7 @@ export class SocketClusterClientService {
 
   subject_test = new Subject();
 
-  constructor() { }
+  constructor(private toastr: ToastrService) { }
 
   connectToSocketCluster(uidChannel: string) {
 
@@ -41,7 +42,7 @@ export class SocketClusterClientService {
             delay(10000))
         )
       ).subscribe(
-        (msg) => { console.log(msg); alert(msg); },
+        (msg) => { console.log(msg); this.showSuccess(msg); },
         (err: any) => console.log(err),
         () => console.log('complete')
       );
@@ -55,7 +56,13 @@ export class SocketClusterClientService {
 
     })();
 
+  }
 
-
+  showSuccess(msg: any) {
+    console.log(msg);
+    this.toastr.info('Hello world!', '' + msg, {
+      "positionClass": "toast-top-full-width",
+    
+    });
   }
 }

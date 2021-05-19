@@ -17,6 +17,9 @@ import { DeleteComponentComponent } from './delete-component/delete-component.co
 import { VehicalComponentComponent } from './vehical-component/vehical-component.component';
 import { NotificationComponentComponent } from './notification-component/notification-component.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,11 +32,15 @@ import { NotificationComponentComponent } from './notification-component/notific
     VehicalComponentComponent,
     NotificationComponentComponent
   ],
-  imports: [StoreModule.forRoot({
-    getV:vehicalReducer,
-    main: mainReducer
-   
-  }),
+  imports: [
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
+
+    StoreModule.forRoot({
+      getV: vehicalReducer,
+      main: mainReducer
+
+    }),
     FormsModule,
     BrowserModule,
     AppRoutingModule,

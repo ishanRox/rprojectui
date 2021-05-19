@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.0.5",
+    "@angular/animations": "^11.0.9",
     "@angular/common": "~11.0.5",
     "@angular/compiler": "~11.0.5",
     "@angular/core": "~11.0.5",
@@ -29,6 +29,7 @@
     "graphql": "^15.0.0",
     "jquery": "^3.6.0",
     "ngx-socket-io": "^4.0.0",
+    "ngx-toastr": "^14.0.0",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "socket.io-client": "^4.0.1",
