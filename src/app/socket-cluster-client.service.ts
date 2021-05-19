@@ -18,12 +18,9 @@ export class SocketClusterClientService {
   constructor(private toastr: ToastrService) { }
 
   connectToSocketCluster(uidChannel: string) {
-
     // ... After the socket is created.
-
     console.log(uidChannel + " unique channel")
     this.socket.transmit("customRemoteEvent", uidChannel);
-
     (async () => {
       let channel = this.socket.subscribe('customRemoteEvent');
       for await (let data of channel) {
@@ -34,8 +31,6 @@ export class SocketClusterClientService {
 
     (async () => {
       let channel = this.socket.subscribe(uidChannel);
-
-
       this.subject_test.pipe(
         concatMap(x => of(x)
           .pipe(
@@ -49,20 +44,16 @@ export class SocketClusterClientService {
 
       for await (let data of channel) {
         // ... Handle channel data.
-        console.log(data + " data received by uidChannel");
-        this.subject_test.next(data + " data received by uidChannel");
+        this.subject_test.next(data );
       }
-
-
     })();
 
   }
 
   showSuccess(msg: any) {
     console.log(msg);
-    this.toastr.info('Hello world!', '' + msg, {
+    this.toastr.info('New Notification recived !', '' + msg, {
       "positionClass": "toast-top-full-width",
-    
     });
   }
 }
